@@ -1,4 +1,4 @@
-import { apiFetch, setToken } from '../utils/api';
+import { apiFetch, setToken, formatDateIST, formatLocalDatetime } from '../utils/api';
 import { router } from '../router';
 
 export function renderAdminLogin() {
@@ -164,11 +164,11 @@ export async function renderAdminElectionEdit(params: string[]) {
         <div class="flex gap-4 mt-2">
           <div style="flex:1">
             <label>Voting Window Start</label>
-            <input type="datetime-local" id="edit-start" value="${election.voting_window_start ? election.voting_window_start.slice(0, 16) : ''}" ${!isDraft ? 'disabled' : ''} />
+            <input type="datetime-local" id="edit-start" value="${formatLocalDatetime(election.voting_window_start)}" ${!isDraft ? 'disabled' : ''} />
           </div>
           <div style="flex:1">
             <label>Voting Window End (Deadline)</label>
-            <input type="datetime-local" id="edit-end" value="${election.voting_window_end ? election.voting_window_end.slice(0, 16) : ''}" ${!isDraft ? 'disabled' : ''} />
+            <input type="datetime-local" id="edit-end" value="${formatLocalDatetime(election.voting_window_end)}" ${!isDraft ? 'disabled' : ''} />
           </div>
         </div>
 
@@ -222,7 +222,7 @@ export async function renderAdminElectionEdit(params: string[]) {
               ${participation.map((p: any) => `
                 <tr style="border-bottom: 1px solid #eee;">
                   <td style="padding: 0.5rem;">${p.email}</td>
-                  <td style="padding: 0.5rem; font-size: 0.8rem; color: #666;">${new Date(p.voted_at).toLocaleString()}</td>
+                  <td style="padding: 0.5rem; font-size: 0.8rem; color: #666;">${formatDateIST(p.voted_at)}</td>
                 </tr>
               `).join('')}
               ${participation.length === 0 ? '<tr><td colspan="2" style="padding: 1rem; text-align: center; color: #999;">No votes cast yet</td></tr>' : ''}
@@ -247,15 +247,19 @@ export async function renderAdminElectionEdit(params: string[]) {
     if (isDraft) {
       (window as any).updateSettings = async (id: string) => {
         const pSize = parseInt((document.getElementById('edit-panel') as HTMLInputElement).value, 10);
-        const start = (document.getElementById('edit-start') as HTMLInputElement).value;
-        const end = (document.getElementById('edit-end') as HTMLInputElement).value;
+        const startLocal = (document.getElementById('edit-start') as HTMLInputElement).value;
+        const endLocal = (document.getElementById('edit-end') as HTMLInputElement).value;
+        
+        // Assume the input is IST (+05:30) and convert to UTC ISO string for backend
+        const start = startLocal ? new Date(startLocal + ':00+05:30').toISOString() : null;
+        const end = endLocal ? new Date(endLocal + ':00+05:30').toISOString() : null;
         
         await apiFetch(`/elections/${id}`, { 
           method: 'PATCH', 
           body: JSON.stringify({ 
             panel_size: pSize,
-            voting_window_start: start || null,
-            voting_window_end: end || null
+            voting_window_start: start,
+            voting_window_end: end
           }) 
         });
         renderAdminElectionEdit([id]);

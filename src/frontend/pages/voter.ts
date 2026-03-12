@@ -1,4 +1,4 @@
-import { apiFetch, setToken } from '../utils/api';
+import { apiFetch, setToken, formatDateIST } from '../utils/api';
 import { router } from '../router';
 
 export function renderVoterLogin(params: string[]) {
@@ -176,7 +176,7 @@ export function renderConfirmation(params: string[]) {
         ${receipt.ballotHash}
         <br/><br/>
         <strong>Timestamp:</strong><br/>
-        ${new Date(receipt.timestamp).toLocaleString()}
+        ${formatDateIST(receipt.timestamp)}
       </div>
 
       <button style="margin-top:2rem;" onclick="navigate('/')">Return Home</button>

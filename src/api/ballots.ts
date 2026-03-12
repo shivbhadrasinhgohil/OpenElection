@@ -15,6 +15,14 @@ ballotsRouter.post('/ballots', requireVoter, async (req, env, ctx) => {
   if (!election) return error(404, 'Election not found');
   if (election.status !== 'open') return error(400, 'Election is not open');
 
+  const now = new Date().toISOString();
+  if (election.voting_window_start && now < election.voting_window_start) {
+    return error(400, 'Election has not started yet');
+  }
+  if (election.voting_window_end && now > election.voting_window_end) {
+    return error(400, 'Election has already ended');
+  }
+
   const email = req.session?.email;
   if (!email) return error(401, 'Unknown voter session');
 
