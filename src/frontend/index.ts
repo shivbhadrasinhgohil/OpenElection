@@ -1,4 +1,5 @@
 import { router } from './router';
+import { renderHeader } from './utils/api';
 import { renderAdminLogin, renderAdminDashboard, renderAdminElectionEdit } from './pages/admin';
 import { renderVoterLogin, renderBallot, renderConfirmation } from './pages/voter';
 import { renderResults, renderAuditLog, renderVerify } from './pages/public';
@@ -7,7 +8,8 @@ import { renderResults, renderAuditLog, renderVerify } from './pages/public';
 router.add('/', () => {
   const app = document.getElementById('app');
   if (app) app.innerHTML = `
-    <div style="text-align: center; max-width: 600px; margin: 4rem auto;" class="card">
+      ${renderHeader()}
+    <div style="text-align: center; max-width: 600px; margin: 0 auto 4rem auto;" class="card">
       <h1>TEC EC Election</h1>
       <p>Welcome to the secure, anonymous election system.</p>
       <div class="flex flex-col gap-4 mt-4">

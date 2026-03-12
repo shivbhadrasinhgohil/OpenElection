@@ -1,4 +1,4 @@
-import { apiFetch } from '../utils/api';
+import { apiFetch, renderHeader } from '../utils/api';
 import { router } from '../router';
 
 export async function renderResults(params: string[]) {
@@ -12,6 +12,7 @@ export async function renderResults(params: string[]) {
     const results = data.results;
 
     app.innerHTML = `
+      ${renderHeader()}
       <div class="card">
         <h2>${election.title} - Official Results</h2>
         <p>Status: ${election.status}</p>
@@ -49,6 +50,7 @@ export async function renderAuditLog(params: string[]) {
     const logs = data.logs || [];
 
     app.innerHTML = `
+      ${renderHeader()}
       <div class="card">
         <div class="flex justify-between items-center mb-4">
           <h2>Election Audit Log</h2>
@@ -78,7 +80,8 @@ export async function renderAuditLog(params: string[]) {
 export function renderVerify() {
   const app = document.getElementById('app')!;
   app.innerHTML = `
-    <div class="card" style="max-width: 600px; margin: 4rem auto;">
+    ${renderHeader()}
+    <div class="card" style="max-width: 600px; margin: 0 auto 4rem auto;">
       <h2>Verify Ballot</h2>
       <p>Enter your Ballot Hash to verify it was recorded in the database chain.</p>
       <input type="text" id="verify-hash" placeholder="e.g. 8f4c...a1b2" />

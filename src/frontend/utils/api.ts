@@ -74,3 +74,11 @@ export function formatLocalDatetime(dateInput: string | Date | null | undefined)
   
   return `${find('year')}-${find('month')}-${find('day')}T${find('hour')}:${find('minute')}`;
 }
+
+export function renderHeader() {
+  return `
+    <header class="header" onclick="navigate('/')">
+      <img src="/assets/logo.png" alt="TEC EC Logo" class="logo" />
+    </header>
+  `;
+}

@@ -1,10 +1,11 @@
-import { apiFetch, setToken, formatDateIST, formatLocalDatetime } from '../utils/api';
+import { apiFetch, setToken, formatDateIST, formatLocalDatetime, renderHeader } from '../utils/api';
 import { router } from '../router';
 
 export function renderAdminLogin() {
   const app = document.getElementById('app')!;
   app.innerHTML = `
-    <div class="card" style="max-width: 400px; margin: 4rem auto;">
+    ${renderHeader()}
+    <div class="card" style="max-width: 400px; margin: 0 auto 4rem auto;">
       <h2>Admin Login</h2>
       <div id="login-error" class="error"></div>
       <div id="login-step-1">
@@ -77,6 +78,7 @@ export async function renderAdminDashboard() {
     }
 
     app.innerHTML = `
+      ${renderHeader()}
       <div class="flex justify-between items-center mb-4">
         <h2>Admin Dashboard</h2>
         <button onclick="logout()">Logout</button>
@@ -132,6 +134,7 @@ export async function renderAdminElectionEdit(params: string[]) {
     const shareLink = window.location.origin + '/vote/' + election.id;
 
     app.innerHTML = `
+      ${renderHeader()}
       <button onclick="navigate('/admin')" style="background:var(--text-muted);margin-bottom:1rem;">&larr; Back to Dashboard</button>
       <div class="card">
         <h2>${election.title} </h2>

@@ -1,4 +1,4 @@
-import { apiFetch, setToken, formatDateIST } from '../utils/api';
+import { apiFetch, setToken, formatDateIST, renderHeader } from '../utils/api';
 import { router } from '../router';
 
 export function renderVoterLogin(params: string[]) {
@@ -6,7 +6,8 @@ export function renderVoterLogin(params: string[]) {
   const app = document.getElementById('app')!;
 
   app.innerHTML = `
-    <div class="card" style="max-width: 400px; margin: 4rem auto;">
+    ${renderHeader()}
+    <div class="card" style="max-width: 400px; margin: 0 auto 4rem auto;">
       <h2>Voter Login</h2>
       <p class="text-muted text-sm">Enter your email address to receive a verification code and cast your vote.</p>
       <div id="login-error" class="error"></div>
@@ -79,6 +80,7 @@ export async function renderBallot(params: string[]) {
     let selected: string[] = [];
 
     app.innerHTML = `
+      ${renderHeader()}
       <div class="card">
         <h2>${election.title} - Official Ballot</h2>
         <p>Instructions: You must select exactly <strong>${requiredSelections}</strong> candidates.</p>
@@ -167,7 +169,8 @@ export function renderConfirmation(params: string[]) {
   const receipt = JSON.parse(receiptStr);
 
   app.innerHTML = `
-    <div class="card" style="text-align:center; max-width:600px; margin: 4rem auto;">
+    ${renderHeader()}
+    <div class="card" style="text-align:center; max-width:600px; margin: 0 auto 4rem auto;">
       <h2 class="success">Vote Cast Successfully</h2>
       <p>Thank you for participating.</p>
       
