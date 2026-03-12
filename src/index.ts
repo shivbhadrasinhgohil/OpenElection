@@ -67,6 +67,13 @@ export default {
         if (env.ASSETS) {
           console.log('[Asset Fallback] Fetching from ASSETS...');
           response = await env.ASSETS.fetch(request);
+          
+          // SPA Fallback: if asset not found and it's a GET request, serve index.html
+          if (response.status === 404 && request.method === 'GET') {
+            console.log('[SPA Fallback] Asset not found, serving index.html...');
+            const indexRequest = new Request(new URL('/', request.url), request);
+            response = await env.ASSETS.fetch(indexRequest);
+          }
         } else {
           console.log('[Routing Fallback] No router match and no ASSETS binding');
           response = error(404, 'Not Found');
